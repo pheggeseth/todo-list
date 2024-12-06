@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 type Todo struct {
@@ -51,8 +52,25 @@ func todosHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func deleteTodoHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+	}
+
+	todoId := r.URL.Path[len("/todos/"):]
+
+	for i, todo := range todos {
+		if strconv.Itoa(todo.Id) == todoId {
+			todos = append(todos[:i], todos[i+1:]...)
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte("Todo with id deleted"))
+		}
+	}
+}
+
 func main() {
-	http.HandleFunc("/", todosHandler)
+	http.HandleFunc("/todos", todosHandler)
+	http.HandleFunc("/todos/", deleteTodoHandler)
 	fmt.Println("Starting server on :8080...")
 	http.ListenAndServe(":8080", nil)
 }
