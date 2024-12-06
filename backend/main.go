@@ -24,6 +24,7 @@ var nextID = len(todos)
 func todosHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
+		fmt.Println("GET /api/todos")
 		json.NewEncoder(w).Encode(todos)
 	case http.MethodPost:
 		err := r.ParseForm()
@@ -45,6 +46,8 @@ func todosHandler(w http.ResponseWriter, r *http.Request) {
 			Title: title,
 			Done: false,
 		})
+
+		fmt.Printf("POST /api/todos\n{\n\ttitle: %s\n}\n", title)
 
 		w.WriteHeader(http.StatusCreated)
 	default:
