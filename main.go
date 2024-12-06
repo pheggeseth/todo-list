@@ -69,8 +69,8 @@ func deleteTodoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/todos", todosHandler)
-	http.HandleFunc("/todos/", deleteTodoHandler)
+	http.HandleFunc("/api/todos", todosHandler)
+	http.HandleFunc("/api/todos/", deleteTodoHandler)
 	fmt.Println("Starting server on :8080...")
 	http.ListenAndServe(":8080", nil)
 }
